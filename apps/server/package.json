@@ -12,8 +12,6 @@
     "auth:generate": "varlock run -- pnpm dlx auth@latest generate --config src/services.ts --output ../../packages/db/prisma/schema/auth.prisma --yes"
   },
   "dependencies": {
-    "@ai-sdk/devtools": "^1.0.15",
-    "@ai-sdk/google": "^4.0.64",
     "@hono/node-server": "^2.1.1",
     "@orpc/openapi": "catalog:",
     "@orpc/server": "catalog:",
@@ -21,7 +19,6 @@
     "@roleproof/api": "workspace:*",
     "@roleproof/auth": "workspace:*",
     "@roleproof/db": "workspace:*",
-    "ai": "catalog:",
     "better-auth": "catalog:",
     "hono": "^4.13.7",
     "varlock": "catalog:",

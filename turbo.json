@@ -47,7 +47,6 @@
     "CI",
     "CORS_ORIGIN",
     "DATABASE_URL",
-    "GOOGLE_GENERATIVE_AI_API_KEY",
     "NEXT_PUBLIC_SERVER_URL",
     "NODE_ENV",
     "VERCEL",
