@@ -1,1 +1,133 @@
 @import "@roleproof/ui/globals.css";
+
+/*
+ * Palette: dusty mauve (background), deep plum (ink), terracotta (accent shapes).
+ * Terracotta is too light for text on mauve, so small accent text uses --brand-ink.
+ */
+:root {
+  --mauve: #c9a0a7;
+  --plum: #3a0f34;
+  --terracotta: #c75a3a;
+
+  --background: var(--mauve);
+  --foreground: var(--plum);
+  --card: #d6b8bd;
+  --card-foreground: var(--plum);
+  --popover: #f1e2e4;
+  --popover-foreground: var(--plum);
+  --primary: var(--plum);
+  --primary-foreground: #f6e9eb;
+  --secondary: #bf929a;
+  --secondary-foreground: var(--plum);
+  --muted: #bf929a;
+  --muted-foreground: #5a2a52;
+  --accent: #bf929a;
+  --accent-foreground: var(--plum);
+  --border: rgb(58 15 52 / 0.2);
+  --input: rgb(58 15 52 / 0.25);
+  --ring: var(--plum);
+
+  --brand: var(--terracotta);
+  --brand-ink: #6b2210;
+  --band: var(--plum);
+  --band-foreground: #f6e9eb;
+  /* Subtle fills and hover states: plum on the light theme, mauve on the dark one */
+  --wash: var(--plum);
+}
+
+.dark {
+  --background: #1c0719;
+  --foreground: #f5ebec;
+  --card: #2a0c26;
+  --card-foreground: #f5ebec;
+  --popover: #2a0c26;
+  --popover-foreground: #f5ebec;
+  --primary: var(--mauve);
+  --primary-foreground: var(--plum);
+  --secondary: #2e1029;
+  --secondary-foreground: #f5ebec;
+  --muted: #2e1029;
+  --muted-foreground: #c9a9b0;
+  --accent: #2e1029;
+  --accent-foreground: #f5ebec;
+  --border: rgb(201 160 167 / 0.18);
+  --input: rgb(201 160 167 / 0.24);
+  --ring: var(--mauve);
+
+  --brand: #d4694a;
+  --brand-ink: #e07a5a;
+  --band: #33102e;
+  --band-foreground: #f8ecee;
+  --wash: var(--mauve);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --color-mauve: var(--mauve);
+  --color-plum: var(--plum);
+  --color-terracotta: var(--terracotta);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-band: var(--band);
+  --color-band-foreground: var(--band-foreground);
+  --color-wash: var(--wash);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Tailwind v4 dropped the pointer cursor on buttons; bring it back app-wide */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+[role="tab"],
+[role="radio"],
+label[for],
+summary {
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--plum);
+  color: var(--mauve);
+}
+
+/* Level meter shown while a line is being spoken */
+@keyframes level {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.level-bar {
+  transform-origin: bottom;
+  animation: level 700ms ease-in-out infinite;
+}
+
+/* Terracotta dot circling the mauve disc in the hero */
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orbit {
+  animation: orbit 24s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .level-bar,
+  .orbit {
+    animation: none;
+  }
+}
