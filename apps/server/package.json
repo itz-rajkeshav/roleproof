@@ -16,6 +16,7 @@
     "@orpc/openapi": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/zod": "catalog:",
+    "@roleproof/agent": "workspace:*",
     "@roleproof/api": "workspace:*",
     "@roleproof/auth": "workspace:*",
     "@roleproof/db": "workspace:*",

@@ -1,13 +1,17 @@
 model User {
-  id            String    @id
+  id            String      @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean     @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   sessions      Session[]
   accounts      Account[]
+  // App relations: re-add these if `auth:generate` overwrites this file.
+  sources       Source[]
+  interviews    Interview[]
+  weakAreas     WeakArea[]
 
   @@unique([email])
   @@map("user")

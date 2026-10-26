@@ -1,8 +1,7 @@
 import type { Context as ApiContext } from "@roleproof/api/context";
 import type { Context as HonoContext } from "hono";
 
-import { db } from "./services";
-import { auth } from "./services";
+import { auth, db, llm } from "./services";
 
 export type CreateContextOptions = {
   context: HonoContext;
@@ -14,6 +13,7 @@ export async function createContext({ context }: CreateContextOptions): Promise<
   });
   return {
     db,
+    llm,
     session,
   };
 }

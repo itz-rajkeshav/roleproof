@@ -15,8 +15,10 @@
     "@orpc/server": "catalog:",
     "@orpc/zod": "catalog:",
     "@prisma/client": "catalog:",
+    "@roleproof/agent": "workspace:*",
     "@roleproof/auth": "workspace:*",
     "@roleproof/db": "workspace:*",
+    "unpdf": "1.9.1",
     "zod": "catalog:"
   },
   "devDependencies": {

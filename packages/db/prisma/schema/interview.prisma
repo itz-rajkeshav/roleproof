@@ -1,0 +1,125 @@
+enum Level {
+  INTERN
+  JUNIOR
+  MID
+  SENIOR
+  STAFF
+}
+
+enum InterviewType {
+  PROJECT_DEEP_DIVE
+  BACKEND_CONCEPTS
+  SYSTEM_DESIGN
+  DSA
+  BEHAVIORAL
+  RESUME_SCREEN
+  FULL_LOOP
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum InterviewStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+// Named Interview (not Session) because Better Auth already owns `Session`.
+model Interview {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  company     String?
+  role        String
+  level       Level
+  type        InterviewType
+  difficulty  Difficulty    @default(MEDIUM)
+  durationMin Int           @default(30)
+  notes       String?
+
+  status   InterviewStatus @default(DRAFT)
+  threadId String          @unique @default(cuid()) // LangGraph thread id
+  plan     Json? // topics picked by the planner
+
+  sources InterviewSource[]
+  turns   Turn[]
+  report  Report?
+
+  startedAt DateTime?
+  endedAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@map("interview")
+}
+
+// Which sources an interview uses (resume + JD, later repos).
+model InterviewSource {
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  sourceId    String
+  source      Source    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@id([interviewId, sourceId])
+  @@index([sourceId])
+  @@map("interview_source")
+}
+
+model Turn {
+  id          String    @id @default(cuid())
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  index    Int // order within the interview
+  topic    String
+  question String
+  answer   String?
+  feedback String?
+  score    Int? // 1-5
+  evidence Json? // later: file:line refs from verify_claim
+
+  askedAt    DateTime  @default(now())
+  answeredAt DateTime?
+
+  @@unique([interviewId, index])
+  @@map("turn")
+}
+
+model Report {
+  id          String    @id @default(cuid())
+  interviewId String    @unique
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  overallScore Int
+  topicScores  Json // [{ topic, score, evidence }]
+  strengths    Json
+  weakAreas    Json
+  prepPlan     Json
+
+  createdAt DateTime @default(now())
+
+  @@map("report")
+}
+
+// Remembered across sessions: one row per user + topic, updated after each interview.
+model WeakArea {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  topic           String
+  score           Float // latest/rolling score
+  occurrences     Int      @default(1)
+  lastInterviewId String?
+  lastSeenAt      DateTime @default(now())
+
+  @@unique([userId, topic])
+  @@map("weak_area")
+}

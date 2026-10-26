@@ -1,0 +1,50 @@
+enum SourceKind {
+  RESUME
+  JOB_DESCRIPTION
+  REPO
+  NOTES
+}
+
+enum SourceFormat {
+  PDF
+  TXT
+  DOCX
+  TEXT // pasted into a textbox
+  URL // GitHub repo link
+}
+
+enum SourceStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
+model Source {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  kind   SourceKind
+  format SourceFormat
+  title  String // "My resume v2", "Google SDE-2 JD"
+
+  originalName String? // uploaded file name
+  mimeType     String?
+  sizeBytes    Int?
+  storageKey   String? // only if the file itself is kept (e.g. Supabase Storage)
+  url          String? // for REPO
+
+  rawText String? // extracted text
+  parsed  Json? // skills / claims / requirements
+  status  SourceStatus @default(PENDING)
+  error   String?
+
+  interviews InterviewSource[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, kind])
+  @@map("source")
+}
